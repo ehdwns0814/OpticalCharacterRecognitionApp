@@ -78,7 +78,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="cameraView" destination="bNa-5T-2af" id="5mv-ab-hz7"/>
+                        <outlet property="cameraView" destination="bNa-5T-2af" id="NRv-M8-Ooj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4mO-1Y-G6a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
