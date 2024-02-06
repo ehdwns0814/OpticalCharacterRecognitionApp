@@ -7,27 +7,35 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0E4901AE2B71CD50005A4208 /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4901AD2B71CD50005A4208 /* UIImageView.swift */; };
 		0ECFB6C82B6B2C260026EDE3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECFB6C72B6B2C260026EDE3 /* AppDelegate.swift */; };
 		0ECFB6CA2B6B2C260026EDE3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECFB6C92B6B2C260026EDE3 /* SceneDelegate.swift */; };
-		0ECFB6CC2B6B2C260026EDE3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECFB6CB2B6B2C260026EDE3 /* ViewController.swift */; };
 		0ECFB6CF2B6B2C260026EDE3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0ECFB6CD2B6B2C260026EDE3 /* Main.storyboard */; };
 		0ECFB6D12B6B2C270026EDE3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0ECFB6D02B6B2C270026EDE3 /* Assets.xcassets */; };
 		0ECFB6D42B6B2C270026EDE3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0ECFB6D22B6B2C270026EDE3 /* LaunchScreen.storyboard */; };
 		0ECFB6DE2B6B2D4C0026EDE3 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECFB6DD2B6B2D4C0026EDE3 /* Color.swift */; };
-		0ECFB6E02B6B2E5D0026EDE3 /* RectangleDetectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECFB6DF2B6B2E5D0026EDE3 /* RectangleDetectionViewController.swift */; };
+		0ECFB6E42B6B36860026EDE3 /* CaptureModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECFB6E32B6B36860026EDE3 /* CaptureModel.swift */; };
+		0ECFB6E82B6B78190026EDE3 /* PreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECFB6E72B6B78190026EDE3 /* PreviewController.swift */; };
+		0ECFB6EA2B6B782B0026EDE3 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECFB6E92B6B782B0026EDE3 /* CameraViewController.swift */; };
+		0ECFB6EC2B6B78340026EDE3 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ECFB6EB2B6B78340026EDE3 /* EditViewController.swift */; };
+		0EE0D2DF2B6C79650011009E /* RectangleDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE0D2DE2B6C79650011009E /* RectangleDetector.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0E4901AD2B71CD50005A4208 /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		0ECFB6C42B6B2C260026EDE3 /* OpticalCharacterRecognitionApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OpticalCharacterRecognitionApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0ECFB6C72B6B2C260026EDE3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0ECFB6C92B6B2C260026EDE3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		0ECFB6CB2B6B2C260026EDE3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		0ECFB6CE2B6B2C260026EDE3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0ECFB6D02B6B2C270026EDE3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0ECFB6D32B6B2C270026EDE3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0ECFB6D52B6B2C270026EDE3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0ECFB6DD2B6B2D4C0026EDE3 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
-		0ECFB6DF2B6B2E5D0026EDE3 /* RectangleDetectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleDetectionViewController.swift; sourceTree = "<group>"; };
+		0ECFB6E32B6B36860026EDE3 /* CaptureModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureModel.swift; sourceTree = "<group>"; };
+		0ECFB6E72B6B78190026EDE3 /* PreviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewController.swift; sourceTree = "<group>"; };
+		0ECFB6E92B6B782B0026EDE3 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
+		0ECFB6EB2B6B78340026EDE3 /* EditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
+		0EE0D2DE2B6C79650011009E /* RectangleDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleDetector.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +49,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0E4901AC2B71CD41005A4208 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				0E4901AD2B71CD50005A4208 /* UIImageView.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		0ECFB6BB2B6B2C260026EDE3 = {
 			isa = PBXGroup;
 			children = (
@@ -60,11 +76,12 @@
 		0ECFB6C62B6B2C260026EDE3 /* OpticalCharacterRecognitionApp */ = {
 			isa = PBXGroup;
 			children = (
+				0E4901AC2B71CD41005A4208 /* Extensions */,
+				0ECFB6E22B6B366C0026EDE3 /* ViewControllers */,
 				0ECFB6DC2B6B2D370026EDE3 /* Enums */,
 				0ECFB6DB2B6B2D310026EDE3 /* Models */,
 				0ECFB6C72B6B2C260026EDE3 /* AppDelegate.swift */,
 				0ECFB6C92B6B2C260026EDE3 /* SceneDelegate.swift */,
-				0ECFB6CB2B6B2C260026EDE3 /* ViewController.swift */,
 				0ECFB6CD2B6B2C260026EDE3 /* Main.storyboard */,
 				0ECFB6D02B6B2C270026EDE3 /* Assets.xcassets */,
 				0ECFB6D22B6B2C270026EDE3 /* LaunchScreen.storyboard */,
@@ -76,7 +93,8 @@
 		0ECFB6DB2B6B2D310026EDE3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				0ECFB6DF2B6B2E5D0026EDE3 /* RectangleDetectionViewController.swift */,
+				0ECFB6E32B6B36860026EDE3 /* CaptureModel.swift */,
+				0EE0D2DE2B6C79650011009E /* RectangleDetector.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -87,6 +105,16 @@
 				0ECFB6DD2B6B2D4C0026EDE3 /* Color.swift */,
 			);
 			path = Enums;
+			sourceTree = "<group>";
+		};
+		0ECFB6E22B6B366C0026EDE3 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				0ECFB6E72B6B78190026EDE3 /* PreviewController.swift */,
+				0ECFB6E92B6B782B0026EDE3 /* CameraViewController.swift */,
+				0ECFB6EB2B6B78340026EDE3 /* EditViewController.swift */,
+			);
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -160,11 +188,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0ECFB6CC2B6B2C260026EDE3 /* ViewController.swift in Sources */,
-				0ECFB6E02B6B2E5D0026EDE3 /* RectangleDetectionViewController.swift in Sources */,
+				0ECFB6EA2B6B782B0026EDE3 /* CameraViewController.swift in Sources */,
+				0E4901AE2B71CD50005A4208 /* UIImageView.swift in Sources */,
+				0EE0D2DF2B6C79650011009E /* RectangleDetector.swift in Sources */,
+				0ECFB6E42B6B36860026EDE3 /* CaptureModel.swift in Sources */,
 				0ECFB6DE2B6B2D4C0026EDE3 /* Color.swift in Sources */,
 				0ECFB6C82B6B2C260026EDE3 /* AppDelegate.swift in Sources */,
 				0ECFB6CA2B6B2C260026EDE3 /* SceneDelegate.swift in Sources */,
+				0ECFB6E82B6B78190026EDE3 /* PreviewController.swift in Sources */,
+				0ECFB6EC2B6B78340026EDE3 /* EditViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,7 +274,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -299,7 +331,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -314,8 +346,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HQ945SN938;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OpticalCharacterRecognitionApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -330,6 +364,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Mango.OpticalCharacterRecognitionApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -341,8 +376,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = HQ945SN938;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = OpticalCharacterRecognitionApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -357,6 +394,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Mango.OpticalCharacterRecognitionApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
