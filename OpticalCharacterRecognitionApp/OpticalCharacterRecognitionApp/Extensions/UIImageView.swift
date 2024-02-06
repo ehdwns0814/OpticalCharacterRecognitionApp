@@ -1,3 +1,10 @@
+//
+//  UIImageView.swift
+//  OpticalCharacterRecognitionApp
+//
+//  Created by 동준 on 2/6/24.
+//
+
 import UIKit
 
 extension UIImageView {
@@ -28,3 +35,44 @@ extension UIImageView {
         }
     }
 }
+
+
+extension UIImageView {
+
+    var normalizedTransformForOrientation: CGAffineTransform? {
+
+        guard let image = image else {
+            return nil
+        }
+
+        let r: CGFloat
+
+        switch image.imageOrientation {
+
+        case .up:
+            r = 0
+
+        case .down:
+            r = +1.0
+
+        case .left:
+            r = -0.5
+
+        case .right:
+            r = +0.5
+
+        default:
+            fatalError()
+        }
+
+        let cx = CGRectGetMidX(bounds)
+        let cy = CGRectGetMidY(bounds)
+
+        var transform = CGAffineTransformIdentity
+        transform = CGAffineTransformTranslate(transform, cx, cy)
+        transform = CGAffineTransformRotate(transform, CGFloat(Double.pi) * r)
+        transform = CGAffineTransformTranslate(transform, -cx, -cy)
+        return transform
+    }
+}
+
