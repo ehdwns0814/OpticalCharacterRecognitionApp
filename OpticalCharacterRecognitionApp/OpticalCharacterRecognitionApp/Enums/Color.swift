@@ -5,7 +5,7 @@
 //  Created by 동준 on 2/1/24.
 //
 
-import Foundation
+import UIKit
 
 enum Color {
     case mainColor
@@ -18,6 +18,15 @@ enum Color {
         case .subColor:
             return (79, 84, 125)
         }
-        
+    }
+
+    var cgColor: CGColor {
+        let (r, g, b) = rgbValue
+        return UIColor(red: CGFloat(r)/255.0, green: CGFloat(g)/255.0, blue: CGFloat(b)/255.0, alpha: 1.0).cgColor
+    }
+    
+    func uiColor(alpha: CGFloat) -> UIColor {
+            let (r, g, b) = rgbValue
+            return UIColor(red: CGFloat(r)/255.0, green: CGFloat(g)/255.0, blue: CGFloat(b)/255.0, alpha: alpha)
     }
 }
