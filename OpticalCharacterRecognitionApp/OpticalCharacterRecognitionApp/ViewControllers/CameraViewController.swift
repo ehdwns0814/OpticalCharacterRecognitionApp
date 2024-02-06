@@ -1,10 +1,15 @@
 import UIKit
 import AVFoundation
 
-class CameraViewController: UIViewController {
+import Foundation
+import UIKit
+import AVFoundation
 
-    @IBOutlet weak var cameraView: UIView!
-    
+class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+
+    let session = AVCaptureSession()
+    let videoOutput = AVCaptureVideoDataOutput()
+    let previewLayer = AVCaptureVideoPreviewLayer()
     let pathLayer: CAShapeLayer = {
         let layer = CAShapeLayer()
         layer.fillColor = UIColor.green.withAlphaComponent(0.3).cgColor
@@ -13,135 +18,99 @@ class CameraViewController: UIViewController {
         return layer
     }()
     
-    var captureSession: AVCaptureSession?
-    var videoPreviewLayer: AVCaptureVideoPreviewLayer?
-
+    @IBOutlet var cameraView: UIView!
+    
     override func viewDidLoad() {
-
         super.viewDidLoad()
-        
-        captureSession = AVCaptureSession()
-        
-        guard let captureDevice = AVCaptureDevice.default(for: .video) else { return }
-        
-        do {
-            let input = try AVCaptureDeviceInput(device: captureDevice)
-            captureSession?.addInput(input)
-        } catch {
-            print(error.localizedDescription)
+
+        setupCamera()
+        cameraView.layer.addSublayer(previewLayer)
+        cameraView.layer.addSublayer(pathLayer)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        previewLayer.frame = cameraView.bounds
+    }
+    
+    func setupCamera() {
+        guard let device = AVCaptureDevice.default(for: .video) else {
+            print("Failed to get camera device")
             return
         }
         
-        let videoOutput = AVCaptureVideoDataOutput()
-        videoOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "sampleBufferQueue"))
-        captureSession?.addOutput(videoOutput)
+        do {
+            let input = try AVCaptureDeviceInput(device: device)
+            session.addInput(input)
+            session.addOutput(videoOutput)
+            
+            videoOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "videoQueue"))
+            
+            previewLayer.session = session
+            previewLayer.videoGravity = .resizeAspectFill
+            
+            session.startRunning()
+        } catch {
+            print("Failed to setup camera")
+        }
+    }
+    
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+            return
+        }
         
-        viewPreview
-
-        imageView?.layer.addSublayer(pathLayer)
-
-        selectImage(image: UIImage(named: "sample"))
-    }
-
-    func selectImage(image: UIImage?) {
-
-        imageView?.image = image
-
-        if let image = image {
-            processImage(input: image)
+        let ciImage = CIImage(cvImageBuffer: imageBuffer)
+        let features = performRectangleDetection(image: ciImage)
+        let path = pathForFeatures(features: features)
+        
+        DispatchQueue.main.async {
+            let transformedPath = path.copy() as! UIBezierPath
+            transformedPath.apply(self.pathTransformForImageView())
+            self.pathLayer.path = transformedPath.cgPath
         }
     }
-
-    func processImage(input: UIImage) {
-
-        let path = pathsForRectanglesInImage(input: input)
-
-        let transform = pathTransformForImageView(imageView: imageView!)
-        path?.apply(transform)
-
-        pathLayer.path = path?.cgPath
-    }
-
-    func pathsForRectanglesInImage(input: UIImage) -> UIBezierPath? {
-
-        guard let sourceImage = CIImage(image: input) else {
-            return nil
-        }
-
-        let features = performRectangleDetection(image: sourceImage)
-
-        return pathForFeatures(features: features)
-    }
-
+    
     func performRectangleDetection(image: CIImage) -> [CIFeature] {
-        
-        let detector:CIDetector = CIDetector(
-            ofType: CIDetectorTypeRectangle,
-            context: nil,
-            options: [CIDetectorAccuracy : CIDetectorAccuracyHigh]
-        )!
-
-        let features = detector.features(in: image)
-
-        return features
+        let detector = CIDetector(ofType: CIDetectorTypeRectangle, context: nil, options: [CIDetectorAccuracy: CIDetectorAccuracyHigh])
+        let features = detector?.features(in: image)
+        return features ?? []
     }
-
+    
     func pathForFeatures(features: [CIFeature]) -> UIBezierPath {
-
         let path = UIBezierPath()
-
+        
         for feature in features {
-
             guard let rect = feature as? CIRectangleFeature else {
                 continue
             }
-
+            
             path.move(to: rect.topLeft)
             path.addLine(to: rect.topRight)
             path.addLine(to: rect.bottomRight)
             path.addLine(to: rect.bottomLeft)
             path.close()
         }
-
+        
         return path
     }
-
-    func pathTransformForImageView(imageView: UIImageView) -> CGAffineTransform {
-
-        guard let image = imageView.image else {
-            return CGAffineTransformIdentity
+    
+    func pathTransformForImageView() -> CGAffineTransform {
+        let videoOrientation = previewLayer.connection?.videoOrientation ?? .portrait
+        
+        var transform = CGAffineTransform.identity
+        
+        switch videoOrientation {
+        case .portrait:
+            transform = CGAffineTransform(rotationAngle: CGFloat.pi/2)
+        case .portraitUpsideDown:
+            transform = CGAffineTransform(rotationAngle: -CGFloat.pi/2)
+        case .landscapeRight:
+            transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+        default:
+            break
         }
-
-        guard let imageScale = imageView.imageScale else {
-            return CGAffineTransformIdentity
-        }
-
-        guard let imageTransform = imageView.normalizedTransformForOrientation else {
-            return CGAffineTransformIdentity
-        }
-
-        let frame = imageView.frame
-
-        let imageWidth = image.size.width * imageScale.width
-        let imageHeight = image.size.height * imageScale.height
-
-        var transform = CGAffineTransformIdentity
-
-        transform = CGAffineTransformConcat(imageTransform, transform)
-
-        transform = CGAffineTransformTranslate(transform, 0, CGRectGetHeight(frame))
-        transform = CGAffineTransformScale(transform, 1.0, -1.0)
-
-        let tx: CGFloat = (CGRectGetWidth(frame) - imageWidth) * 0.5
-        let ty: CGFloat = (CGRectGetHeight(frame) - imageHeight) * 0.5
-        transform = CGAffineTransformTranslate(transform, tx, ty)
-
-        transform = CGAffineTransformScale(transform, imageScale.width, imageScale.height)
-
+        
         return transform
     }
-}
-
-extension CameraViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
-    
 }
