@@ -7,11 +7,6 @@
 
 import UIKit
 
-class PreviewController: UIViewController {
-
-    var capturedImage: UIImage?
-    var detectedRectanglePoints: [CGPoint] = []
-
 final class PreviewController: UIViewController {
     
     @IBOutlet var imageView: UIImageView!
@@ -21,25 +16,44 @@ final class PreviewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-
-        let imageView = UIImageView(image: capturedImage)
-        imageView.contentMode = .scaleAspectFit
-        imageView.frame = view.bounds
-        view.addSubview(imageView)
         
-        drawRectangle()
+        imageArray.append(UIImage(named: "sample")!)
+        imageArray.append(UIImage(named: "sample4")!)
+        imageArray.append(UIImage(named: "sample1")!)
+        selectImage(index: imageIndex)
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(Swipe(sender:)))
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(Swipe(sender:)))
+        
+        swipeLeft.direction = .left
+        swipeRight.direction = .right
+        
+        self.view.addGestureRecognizer(swipeLeft)
+        self.view.addGestureRecognizer(swipeRight)
     }
-
-    func drawRectangle() {
-        let rectangleLayer = CAShapeLayer()
-        rectangleLayer.strokeColor = UIColor.red.cgColor
-        rectangleLayer.lineWidth = 2.0
-        rectangleLayer.fillColor = UIColor.clear.cgColor
-
-        let path = UIBezierPath()
-        path.move(to: detectedRectanglePoints[0])
-        for point in detectedRectanglePoints {
-            path.addLine(to: point)
+    
+    @objc func Swipe(sender: UISwipeGestureRecognizer) {
+        switch sender.direction {
+        case .right:
+            selectImage(index: -1)
+            print("left이동")
+        case .left:
+            selectImage(index: 1)
+            print("right이동")
+        default:
+            break
+        }
+    }
+    
+    @IBAction func counterclockwiseButton(_ sender: Any) {
+        if let image = imageView?.image {
+            if let ciImage = CIImage(image: image) {
+                imageView?.image = createRotatedImage(from: ciImage )
+            }
+        }
+    }
+    
+    
     func createRotatedImage(from ciImage: CIImage) -> UIImage? {
         let flattenedImage = ciImage // 이미지를 가져오는 코드
         UIGraphicsBeginImageContext(CGSize(width: flattenedImage.extent.size.height, height: flattenedImage.extent.size.width))
@@ -48,8 +62,21 @@ final class PreviewController: UIViewController {
         UIGraphicsEndImageContext()
         return rotatedImage
     }
+    
+    func selectImage(index: Int) {
+        imageIndex += index
+        if imageIndex < 0 {
+            imageIndex = 0
+        } else if imageIndex == imageArray.count {
+            imageIndex = imageArray.count - 1
         }
-        path.close()
+        imageView.image = imageArray[imageIndex]
+        
+        if let image = imageView.image {
+            processImage(input: image)
+        }
+    }
+    
     //이미지 편면화 함수
     func flattenImage(image: CIImage, topLeft: CGPoint, topRight: CGPoint,bottomLeft: CGPoint, bottomRight: CGPoint) -> CIImage {
         
@@ -153,4 +180,3 @@ final class PreviewController: UIViewController {
         return transform
     }
 }
-
