@@ -40,6 +40,14 @@ final class PreviewController: UIViewController {
         path.move(to: detectedRectanglePoints[0])
         for point in detectedRectanglePoints {
             path.addLine(to: point)
+    func createRotatedImage(from ciImage: CIImage) -> UIImage? {
+        let flattenedImage = ciImage // 이미지를 가져오는 코드
+        UIGraphicsBeginImageContext(CGSize(width: flattenedImage.extent.size.height, height: flattenedImage.extent.size.width))
+        UIImage(ciImage: flattenedImage, scale: 1.0, orientation: .left).draw(in: CGRect(x: 0, y: 0, width: flattenedImage.extent.size.height, height: flattenedImage.extent.size.width))
+        let rotatedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return rotatedImage
+    }
         }
         path.close()
     //이미지 편면화 함수
