@@ -16,13 +16,16 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     private var isTapped = false
     
     override func viewDidAppear(_ animated: Bool) {
-        //session Start
         self.videoDataOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "camera_frame_processing_queue"))
-        self.captureSession.startRunning()
+        
+        DispatchQueue.global().async {
+            self.captureSession.startRunning()
+        }
+        
+        refreshCapturedImageView()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        //session Stopped
         self.videoDataOutput.setSampleBufferDelegate(nil, queue: nil)
         self.captureSession.stopRunning()
     }
@@ -100,5 +103,31 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
             return
         }
         
+        lazy var ciImage = CIImage(cvPixelBuffer: frame)
+        lazy var image = UIImage(ciImage: ciImage)
+        ciImage = ciImage.oriented(forExifOrientation: Int32(UIImage.Orientation.leftMirrored.rawValue))
+        captureImage = image
+    }
+    
+    private func capturePhoto() {
+        refreshCapturedImageView()
+        do {
+            try imageManager.setPhoto(image: captureImage)
+        } catch {
+            print("사진 저장실패 \(error)")
+        }
+    }
+    
+    
+}
+
+extension MainViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
+
+    
+}
+
+extension MainViewController {
+    @IBAction func captureButtonTapped(_ sender: UIButton) {
+        capturePhoto()
     }
 }
