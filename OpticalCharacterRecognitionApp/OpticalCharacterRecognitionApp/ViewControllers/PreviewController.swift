@@ -12,17 +12,13 @@ final class PreviewController: UIViewController {
     @IBOutlet var imageView: UIImageView!
     @IBOutlet weak var capturedImageCount: UILabel!
     
-//    private var imageArray = [UIImage]()
     private var imageIndex = 0
     private let imageManager = ImageManager.shared
     
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
-        imageArray.append(UIImage(named: "sample")!)
-        imageArray.append(UIImage(named: "sample4")!)
-        imageArray.append(UIImage(named: "sample1")!)
+        imageManager.originalPhotos.removeFirst()
         selectImage(index: imageIndex)
         
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(Swipe(sender:)))
@@ -55,9 +51,23 @@ final class PreviewController: UIViewController {
             }
         }
     }
-
     
-    func selectImage(index: Int) {
+    
+    @IBAction func removeImageButton(_ sender: UIButton) {
+        if imageManager.originalPhotos.count == 0 {
+            selectImage(index: 0)
+        }else if imageManager.originalPhotos.count == 1 {
+            imageManager.originalPhotos.removeLast()
+            imageManager.originalPhotos.insert(UIImage(named: "noImage")!, at: 0)
+            selectImage(index: -1)
+        } else {
+            imageManager.originalPhotos.removeLast()
+            selectImage(index: -1)
+        }
+    }
+    
+    
+    private func selectImage(index: Int) {
         
         imageIndex += index
         if imageIndex < 0 {
@@ -65,6 +75,7 @@ final class PreviewController: UIViewController {
         } else if imageIndex == imageManager.originalPhotos.count {
             imageIndex = imageManager.originalPhotos.count - 1
         }
+        capturedImageCount.text = "\(imageIndex + 1)/\(imageManager.originalPhotos.count - 1)"
         imageView.image = imageManager.originalPhotos[imageIndex]
         
         if let image = imageView.image {
@@ -72,18 +83,7 @@ final class PreviewController: UIViewController {
         }
     }
     
-    //이미지 편면화 함수
-    func flattenImage(image: CIImage, topLeft: CGPoint, topRight: CGPoint,bottomLeft: CGPoint, bottomRight: CGPoint) -> CIImage {
-        
-        return image.applyingFilter("CIPerspectiveCorrection", parameters: [
-            "inputTopLeft": CIVector(cgPoint: topLeft),
-            "inputTopRight": CIVector(cgPoint: topRight),
-            "inputBottomLeft": CIVector(cgPoint: bottomLeft),
-            "inputBottomRight": CIVector(cgPoint: bottomRight)
-        ])
-    }
-    
-    func processImage(input: UIImage) {
+    private func processImage(input: UIImage) {
         
         if let flattenedImage = imageManager.imageForRectanglesInImage(input: input) {
             
@@ -92,86 +92,8 @@ final class PreviewController: UIViewController {
                 return
             }
             let uiImage = UIImage(cgImage: cgImage)
-
+            
             imageView?.image = uiImage
         }
-    }
-    
-    func imageForRectanglesInImage(input: UIImage) -> CIImage? {
-        guard let sourceImage = CIImage(image: input) else {
-            return nil
-        }
-        
-        let features = performRectangleDetection(image: sourceImage)
-        
-        if let rectangleFeatures = features as? [CIRectangleFeature], let firstRectangle = rectangleFeatures.first {
-            let topLeft = firstRectangle.topLeft
-            let topRight = firstRectangle.topRight
-            let bottomLeft = firstRectangle.bottomLeft
-            let bottomRight = firstRectangle.bottomRight
-            
-            let cgTopLeft = CGPoint(x: topLeft.x, y: topLeft.y)
-            let cgTopRight = CGPoint(x: topRight.x, y: topRight.y)
-            let cgBottomLeft = CGPoint(x: bottomLeft.x, y: bottomLeft.y)
-            let cgBottomRight = CGPoint(x: bottomRight.x, y: bottomRight.y)
-            
-            return flattenImage(image: sourceImage, topLeft: cgTopLeft, topRight: cgTopRight, bottomLeft: cgBottomLeft, bottomRight: cgBottomRight)
-        }
-        
-        return nil
-    }
-    
-    // 이미지 내 사각형 탐지
-    func performRectangleDetection(image: CIImage) -> [CIFeature] {
-        
-        let detector:CIDetector = CIDetector(
-            ofType: CIDetectorTypeRectangle,
-            context: nil,
-            options: [CIDetectorAccuracy : CIDetectorAccuracyHigh]
-        )!
-        
-        let features = detector.features(in: image)
-        
-        return features
-    }
-    
-    // Core Image -> UIKit coordinate으로 변환
-    func pathTransformForImageView(imageView: UIImageView) -> CGAffineTransform {
-        
-        guard let image = imageView.image else {
-            return CGAffineTransformIdentity
-        }
-        
-        guard let imageScale = imageView.imageScale else {
-            return CGAffineTransformIdentity
-        }
-        
-        guard let imageTransform = imageView.normalizedTransformForOrientation else {
-            return CGAffineTransformIdentity
-        }
-        
-        let frame = imageView.frame
-        
-        let imageWidth = image.size.width * imageScale.width
-        let imageHeight = image.size.height * imageScale.height
-        
-        var transform = CGAffineTransformIdentity
-        
-        // Rotate to match the image orientation.
-        transform = CGAffineTransformConcat(imageTransform, transform)
-        
-        // Flip vertically (flipped in CIDetector).
-        transform = CGAffineTransformTranslate(transform, 0, CGRectGetHeight(frame))
-        transform = CGAffineTransformScale(transform, 1.0, -1.0)
-        
-        // Centre align.
-        let tx: CGFloat = (CGRectGetWidth(frame) - imageWidth) * 0.5 + -5
-        let ty: CGFloat = (CGRectGetHeight(frame) - imageHeight) * 0.5 + 70
-        transform = CGAffineTransformTranslate(transform, tx, ty)
-        
-        // Scale to match UIImageView scaling.
-        transform = CGAffineTransformScale(transform, imageScale.width, imageScale.height)
-        
-        return transform
     }
 }
