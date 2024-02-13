@@ -10,8 +10,11 @@ import UIKit
 final class PreviewController: UIViewController {
     
     @IBOutlet var imageView: UIImageView!
-    private var imageArray = [UIImage]()
+    @IBOutlet weak var capturedImageCount: UILabel!
+    
+//    private var imageArray = [UIImage]()
     private var imageIndex = 0
+    private let imageManager = ImageManager.shared
     
     override func viewDidLoad() {
         
@@ -48,29 +51,21 @@ final class PreviewController: UIViewController {
     @IBAction func counterclockwiseButton(_ sender: Any) {
         if let image = imageView?.image {
             if let ciImage = CIImage(image: image) {
-                imageView?.image = createRotatedImage(from: ciImage )
+                imageView?.image = imageManager.createRotatedImage(from: ciImage )
             }
         }
     }
-    
-    
-    func createRotatedImage(from ciImage: CIImage) -> UIImage? {
-        let flattenedImage = ciImage // 이미지를 가져오는 코드
-        UIGraphicsBeginImageContext(CGSize(width: flattenedImage.extent.size.height, height: flattenedImage.extent.size.width))
-        UIImage(ciImage: flattenedImage, scale: 1.0, orientation: .left).draw(in: CGRect(x: 0, y: 0, width: flattenedImage.extent.size.height, height: flattenedImage.extent.size.width))
-        let rotatedImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return rotatedImage
-    }
+
     
     func selectImage(index: Int) {
+        
         imageIndex += index
         if imageIndex < 0 {
             imageIndex = 0
-        } else if imageIndex == imageArray.count {
-            imageIndex = imageArray.count - 1
+        } else if imageIndex == imageManager.originalPhotos.count {
+            imageIndex = imageManager.originalPhotos.count - 1
         }
-        imageView.image = imageArray[imageIndex]
+        imageView.image = imageManager.originalPhotos[imageIndex]
         
         if let image = imageView.image {
             processImage(input: image)
@@ -90,7 +85,7 @@ final class PreviewController: UIViewController {
     
     func processImage(input: UIImage) {
         
-        if let flattenedImage = imageForRectanglesInImage(input: input) {
+        if let flattenedImage = imageManager.imageForRectanglesInImage(input: input) {
             
             let context = CIContext(options: nil)
             guard let cgImage = context.createCGImage(flattenedImage, from: flattenedImage.extent) else {
