@@ -2,16 +2,24 @@ import UIKit
 import AVFoundation
 import CoreImage
 
-class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+final class MainViewController: UIViewController {
     
-    @IBOutlet weak var previewView: UIView!
-    
+    @IBOutlet weak var preView: UIView!
+    @IBOutlet weak var capturedImageView: UIImageView!
     
     private let captureSession = AVCaptureSession()
     private lazy var previewLayer = AVCaptureVideoPreviewLayer(session: self.captureSession)
     private let videoDataOutput = AVCaptureVideoDataOutput()
+    private var captureImage = UIImage()
+    private let imageManager = ImageManager.shared
     
-    private var maskLayer = CAShapeLayer()
+    private lazy var maskLayer: CAShapeLayer = {
+        let layer = CAShapeLayer()
+        layer.fillColor = Color.subColor.cgColor
+        layer.strokeColor = Color.mainColor.uiColor(alpha: 0.5).cgColor
+        layer.lineWidth = 2.0
+        return layer
+    }()
     
     private var isTapped = false
     
@@ -36,12 +44,20 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         setCameraInput()
         self.showCameraFeed()
         self.setCameraOutput()
+        
+        checkCameraPermission()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        self.previewLayer.frame = self.previewView.bounds
-    func checkCameraPermission() {
+        self.previewLayer.frame = self.preView.bounds
+    }
+    
+    private func refreshCapturedImageView() {
+        capturedImageView.image = imageManager.originalPhotos[imageManager.originalPhotos.count - 1]
+    }
+    
+    private func checkCameraPermission() {
         let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
         switch cameraAuthorizationStatus {
         case .notDetermined:
@@ -65,7 +81,6 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         }
     }
     
-    //MARK: Session initialisation and video output
     private func setCameraInput() {
         guard let device = AVCaptureDevice.DiscoverySession(
             deviceTypes: [.builtInWideAngleCamera, .builtInDualCamera, .builtInTrueDepthCamera],
@@ -79,8 +94,8 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     
     private func showCameraFeed() {
         self.previewLayer.videoGravity = .resizeAspectFill
-        self.previewView.layer.addSublayer(self.previewLayer)
-        self.previewLayer.frame = self.previewView.frame
+        self.preView.layer.addSublayer(self.previewLayer)
+        self.previewLayer.frame = self.preView.frame
     }
     
     private func setCameraOutput() {
@@ -96,7 +111,6 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         connection.videoOrientation = .portrait
     }
     
-    //MARK: AVCaptureVideo Delegate
     func captureOutput(_ output: AVCaptureOutput,didOutput sampleBuffer: CMSampleBuffer,from connection: AVCaptureConnection) {
         guard let frame = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             debugPrint("unable to get image from sample buffer")
