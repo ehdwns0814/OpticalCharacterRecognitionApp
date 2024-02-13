@@ -38,6 +38,28 @@ class MainViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.previewLayer.frame = self.previewView.bounds
+    func checkCameraPermission() {
+        let cameraAuthorizationStatus = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
+        switch cameraAuthorizationStatus {
+        case .notDetermined:
+            print("카메라 권한 인증 전")
+            AVCaptureDevice.requestAccess(for: .video, completionHandler: { access in
+                if access {
+                    print("카메라 권한 허용")
+                } else {
+                    print("카메라 권한 거부")
+                    return
+                }
+            })
+        case .restricted:
+            print("카메라 권한 불가 상태")
+        case .denied:
+            print("카메라 권한 거부 상태")
+        case .authorized:
+            print("카메라 권한 허용 상태")
+        @unknown default:
+            print("카메라 권한 알수 없는 상태")
+        }
     }
     
     //MARK: Session initialisation and video output
