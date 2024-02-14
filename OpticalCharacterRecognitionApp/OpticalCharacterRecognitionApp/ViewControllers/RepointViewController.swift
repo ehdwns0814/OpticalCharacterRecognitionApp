@@ -9,13 +9,7 @@ import UIKit
 
 final class RepointViewController: UIViewController {
     
-    let pathLayer: CAShapeLayer = {
-        let layer = CAShapeLayer()
-        layer.fillColor = Color.subColor.cgColor
-        layer.strokeColor = UIColor.green.withAlphaComponent(0.9).cgColor
-        layer.lineWidth = 2.0
-        return layer
-    }()
+    let pathLayer = CAShapeLayer()
     
     @IBOutlet var imageView: UIImageView?
     
